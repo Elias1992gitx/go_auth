@@ -31,7 +31,7 @@ go mod download
  3 Configure your database connection
 Modify database/connection.go with your credentials:
 
-dsn := "your_username:your_password@tcp(localhost:3306)/your_database"
+dsn := "https://github.com/Elias1992gitx/go_auth.git"
 
 
 ### 4 Run the application
