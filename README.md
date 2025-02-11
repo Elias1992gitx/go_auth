@@ -1,47 +1,50 @@
-JWT Authentication in Go
+# JWT Authentication in Go
 
-A secure JWT-based authentication system built with Go, Fiber, and GORM.
+A secure JWT-based authentication system built with Go, Fiber, and GORM (Object Relational Mapping (ORM) library for Golang).
 
-Features
+# Features
+-  User registration with password hashing
+-  Secure login with JWT token generation
+-  Protected routes with JWT verification
+-  User information retrieval
+-  Secure logout mechanism
+-  CORS support for cross-origin requests
+-  MySQL database integration
 
-User registration with password hashing
-Secure login with JWT token generation
-Protected routes with JWT verification
-User information retrieval
-Secure logout mechanism
-CORS support for cross-origin requests
-MySQL database integration
+# Prerequisites
+Ensure you have the following installed:
 
-Prerequisites
+- Go (1.23.6 or higher)
+- MySQL database
+- Git (for cloning the repository)
 
-Go 1.23.6 or higher
-MySQL database
-Git (for cloning the repository)
+# Installation
+ 1 Clone the repository
 
-Installation
-
-Clone the repository:
 git clone https://github.com/yourusername/JWT-Authentication-go.git
 cd JWT-Authentication-go
 
-Install dependencies:
+ 2 Install dependencies
+
 go mod download
 
-Configure your database connection in database/connection.go:
+ 3 Configure your database connection
+Modify database/connection.go with your credentials:
+
 dsn := "your_username:your_password@tcp(localhost:3306)/your_database"
 
-Run the application:
+
+### 4 Run the application
 go run main.go
 
-Security Features
+# Security Features
+- Password hashing using bcrypt
+- JWT token-based authentication
+- HTTP-only cookies for token storage
+- CORS protection
+- Secure cookie flags
 
-Password hashing using bcrypt
-JWT token-based authentication
-HTTP-only cookies for token storage
-CORS protection
-Secure cookie flags
-
-Project Structure
+# Project Structure
 
 JWT-Authentication-go/
 ├── controllers/
@@ -56,10 +59,11 @@ JWT-Authentication-go/
 ├── go.mod
 └── go.sum
 
-Environment Variables
+# Environment Variables
+For production deployment, move sensitive configurations to environment variables:
 
-For production deployment, consider moving these configurations to environment variables:
-Database connection string
-JWT secret key
-Server port
-CORS settings
+- Database connection string
+- JWT secret key
+- Server port
+- CORS settings
+
