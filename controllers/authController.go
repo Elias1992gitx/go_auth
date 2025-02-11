@@ -11,11 +11,8 @@ import (
     "strconv"   // Add this import
 )
 
+//for production env set in env file (secure position)
 const secretKey = "jK6DX#mP9$vL2@nQ8wR4tY7hC3bE5sA"
-// Hello returns a simple "Hello world!!" message
-func Hello(c *fiber.Ctx) error {
-    return c.SendString("Hello world!!")
-}
 
 //register function
 func Register(c *fiber.Ctx) error {
@@ -124,4 +121,64 @@ func Login(c *fiber.Ctx) error {
         "message": "Login successful",
     })
 
+}
+
+
+// user retrieval function
+func User(c *fiber.Ctx) error {
+    fmt.Println("Request to get user...")
+
+    // Retrieve JWT token from cookie
+    cookie := c.Cookies("jwt")
+
+    // Parse JWT token with claims
+    token, err := jwt.ParseWithClaims(cookie, &jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
+        return []byte(secretKey), nil
+    })
+
+    // Handle token parsing errors
+    if err != nil {
+        return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+            "error": "Unauthorized",
+        })
+    }
+
+    // Extract claims from token
+    claims, ok := token.Claims.(*jwt.MapClaims)
+    if !ok {
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "error": "Failed to parse claims",
+        })
+    }
+
+    // Extract user ID from claims
+    id, _ := strconv.Atoi((*claims)["sub"].(string))
+    user := models.User{ID: uint(id)}
+
+    // Query user from database using ID
+    database.DB.Where("id =?", id).First(&user)
+
+    // Return user details as JSON response
+    return c.JSON(user)
+}
+
+
+// logout function
+func Logout(c *fiber.Ctx) error {
+    fmt.Println("Received a logout request")
+
+    // Clear JWT token by setting an empty value and expired time in the cookie
+    cookie := fiber.Cookie{
+        Name:     "jwt",
+        Value:    "",
+        Expires:  time.Now().Add(-time.Hour), // Expired 1 hour ago
+        HTTPOnly: true,
+        Secure:   true,
+    }
+    c.Cookie(&cookie)
+
+    // Return success response indicating logout was successful
+    return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+        "message": "Logout successful",
+    })
 }
