@@ -21,7 +21,7 @@ Ensure you have the following installed:
 # Installation
  1 Clone the repository
 
-git clone https://github.com/yourusername/JWT-Authentication-go.git
+git clone (https://github.com/Elias1992gitx/go_auth.git)
 cd JWT-Authentication-go
 
  2 Install dependencies
@@ -31,7 +31,7 @@ go mod download
  3 Configure your database connection
 Modify database/connection.go with your credentials:
 
-dsn := "https://github.com/Elias1992gitx/go_auth.git"
+dsn := "dsn := "your_username:your_password@tcp(localhost:3306)/your_database""
 
 
 ### 4 Run the application
