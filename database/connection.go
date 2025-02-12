@@ -1,24 +1,30 @@
 package database
 
 import (
-	// "JWT-Authentication-go/config"
-	"JWT-Authentication-go/models"
-	"gorm.io/gorm"
-	"gorm.io/driver/mysql"
+	"context"
+	"time"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var DB *gorm.DB
+var DB *mongo.Database
 
-func ConnectDB() (*gorm.DB, error) {
-	dsn := "root:Elias/096031@tcp(localhost:3306)/godb"
-
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+func ConnectDB() (*mongo.Database, error) {
+	clientOptions := options.Client().ApplyURI("mongodb+srv://nexus_user:Elias%2F096031@cluster0.artx9hp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+	client, err := mongo.NewClient(clientOptions)
 	if err != nil {
 		return nil, err
 	}
 
-	DB = db
-	db.AutoMigrate(& models.User{})
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-	return db, nil
+	err = client.Connect(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	DB = client.Database("godb")
+	return DB, nil
 }
